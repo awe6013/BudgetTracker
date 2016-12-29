@@ -1,22 +1,72 @@
-import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
+import { Accounts } from 'meteor/accounts-base';
+// if(!Meteor.userId()){
+//   console.log(FlowRouter.getRouteName());
+//   console.log(FlowRouter.current());
+//   FlowRouter.go("/login");
+// }
 
-import './main.html';
+document.title="Ivy";
 
-Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
+
+//For testing
+//Meteor.subscribe("allUsers");
+
+Meteor.subscribe("allContacts");
+Meteor.subscribe("contact");
+Meteor.subscribe("userSelf");
+Meteor.subscribe("allGroups");
+Meteor.subscribe("allCounters");
+Meteor.subscribe("allOptions");
+Meteor.subscribe("allPagePermissions");
+
+checkPermission = function(id){
+	var grps = Groups.find({users: Meteor.userId()}).fetch();
+	var ids = [];
+	grps.forEach(function(group){
+		ids.push(group._id);
+	});
+
+	return PagePermissions.find({_id:id,groups: {$in: ids}}).fetch().length>0;
+}
+
+
+Accounts.onEnrollmentLink(function(token,done){
+  //Accounts.resetPassword()
+  FlowRouter.go("/signup/"+token);
 });
 
-Template.hello.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
-});
+if ($) {
+  Vel = $.Velocity;
+}
+else {
+  Vel = Velocity; // change value with jQuery.Velocity
+}
 
-Template.hello.events({
-  'click button'(event, instance) {
-    // increment the counter when button is clicked
-    instance.counter.set(instance.counter.get() + 1);
-  },
-});
+
+checkEventPermission = function(ev){
+  // if(!ev.permUser){
+  //   return {"view":false,"edit": false};
+  // }
+	if(ev.owner==Meteor.userId()){
+		return {view: true, edit: true}
+	}
+  var perm = false;// ev.perm[""]
+	var view = false;
+	for(i=0; i < ev.permUser.length; i++){
+		if(ev.permUser[i].id == Meteor.userId()){
+			view = true;
+			perm = ev.permUser[i].edit;
+			break;
+		}
+	}
+	//console.log(ev.permGroup);
+	for(i=0; i < ev.permGroup.length; i++){
+		if(getUserGroupPermission().indexOf(ev.permGroup[i].id)>-1){
+			//console.log("true");
+			view = true;
+			perm = ev.permGroup[i].edit||perm;
+			break;
+		}
+	}
+  return {"view": view,"edit": perm};
+}
