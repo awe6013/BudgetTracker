@@ -49,17 +49,17 @@ export default class LoginWrapper extends TrackerReact(React.Component){
 
 
   render() {
-    document.title="Ivy - Login";
+    document.title="Budget Tracker - Login";
     return (
         <div className="row">
           <div className="col s12 m8 offset-m2">
             <div className="card">
               <div className="card-content">
-                <span className="card-title">Ivy Sign In</span>
+                <span className="card-title">Tracer Sign In</span>
                   <form className="publicForm" onSubmit={this.submit.bind(this)}>
                     {this.state.forgot?<p>Incorrect username or password. Please try again or click 'forgot password'.</p>:""}
                     <div className="input-field col s12">
-                      <input type="text" name="email" /> 
+                      <input type="text" name="email" />
                       <label>Email</label>
                     </div>
                     <div className="input-field col s12">

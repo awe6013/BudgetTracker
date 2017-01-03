@@ -26,3 +26,4 @@
 //     EventsAttendanceBackup.insert({events: Events.find({},{name: 1, start: 1, attendees: 1}).fetch(), timestamp: new Date()});
 //   }
 // });
+//Cats.insert({label: "Test"});

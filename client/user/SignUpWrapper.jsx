@@ -55,24 +55,24 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
     //   "");
     var thiz = this;
 
-    Accounts.resetPassword(this.props.token, passwordVar, function(error){
-      if(error){
-        window.alert("error");
-      }
-      //Meteor.call("setUserUsername", userVar);
-      FlowRouter.go("/");
-    });
-    // Accounts.createUser({
-    //   username: userVar,
-    //   password: passwordVar,
-    //   email: this.getContact().email,
-    //   contactid: this.props.cid
+    // Accounts.resetPassword(this.props.token, passwordVar, function(error){
+    //   if(error){
+    //     window.alert("error");
+    //   }
+    //   //Meteor.call("setUserUsername", userVar);
+    //   FlowRouter.go("/");
     // });
+    Accounts.createUser({
+      //username: userVar,
+      name: this.refs.name.value.trim(),
+      password: passwordVar,
+      email: this.refs.email.value.trim()
+    });
 
     //this.setState({submitted: true});
 
-
-    return;
+    this.go();
+    //return;
   }
 
   // setUsername(event){
@@ -84,21 +84,25 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
 
 
   render() {
-    document.title="Ivy - Set Password";
+    //document.title="Ivy - Set Password";
     return (
-      <div id="card" className="panel panel-info">
-        <div className="panel-heading">Ivy Set Password</div>
-        <div className="panel-body">
-          <p>Please set a password.</p>
-          <form className="publicForm" onSubmit={this.submit.bind(this)}>
-          {/*}  <label>Username</label> <br />
+      <div className="card">
+        <div className="card-content">
+          <span className="card-title">Create Account</span>
+          <form onSubmit={this.submit.bind(this)}>
+            <label>Name</label>
             <input type="text"
-              name="username"
-              ref="username"
+              name="name"
+              ref="name"
               required
               />
-            <br />*/}
-            <label>Password</label> <br />
+            <label>Email</label>
+            <input type="email"
+              name="email"
+              ref="email"
+              required
+              />
+            <label>Password</label>
             <input type="password"
               name="loginPassword"
               ref="loginPassword"
@@ -106,17 +110,15 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
               required
               />
             <br />
-            <label>Password</label> <br />
+            <label>Confirm Password</label>
             <input type="password"
               name="loginPasswordCheck"
               ref="loginPasswordCheck"
               onChange={this.checkPasswords.bind(this)}
               required
               />
-            <br />
             <p>Passwords Match: {this.state.passwordcheck?"Yes":"No"}</p>
-            <br />
-            <input type="submit" name="submit" value="Sign Up!" />
+            <input className="btn" type="submit" name="submit" value="Sign Up!" />
           </form>
         </div>
       </div>
